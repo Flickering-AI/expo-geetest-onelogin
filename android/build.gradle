@@ -86,4 +86,6 @@ repositories {
 dependencies {
   implementation project(':expo-modules-core')
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${getKotlinVersion()}"
+
+  api 'com.geetest.android:onelogin:2.8.4'
 }
