@@ -23,7 +23,7 @@ export function addChangeListener(listener: (event: ChangeEventPayload) => void)
 export { ExpoGeetestOneloginView, ExpoGeetestOneloginViewProps, ChangeEventPayload };
 
 /**
- * 
+ * 初始化。iOS不需要这这个Api，如果调用的话什么都不会发生
  * @param appId appId	String	极验后台配置唯一产品APPID，请在官网申请, 注意与服务端保持一致
  */
 export function init(appId: string) {
@@ -31,11 +31,19 @@ export function init(appId: string) {
 }
 
 /**
+ * 判断预取号结果是否有效
  * 
  * @param appId 极验后台配置唯一产品APPID，请在官网申请, 如init接口传了 appId 此处可传空值
  */
 export function register(appId: string) {
   return ExpoGeetestOneloginModule.register(appId);
+}
+
+/**
+ * @return true: 预取号结果有效，可直接拉起授权页面 false: 预取号结果无效，需加载进度条，等待预取号完成之后拉起授权页面
+ */
+export function isPreGetTokenResultValidate(): boolean {
+  return ExpoGeetestOneloginModule.isPreGetTokenResultValidate();
 }
 
 export async function requestToken(oneLoginThemeConfig?: {
@@ -196,7 +204,7 @@ export function dismissAuthActivity(): string {
 }
 
 /**
- * 超时时间，单位:ms，取值范围:1000~15000，默认8000。传递该参数会统一设置预取号超时时间和取号超时时间为设定值，分别设置请使用不带timeout的方法并参考setRequestTimeout。
+ * 超时时间，单位:ms，取值范围:1000~15000，默认8000。
  * @param preGetTokenTimeout 预取号超时时间
  * @param requestTokenTimeout 取号超时时间
  */

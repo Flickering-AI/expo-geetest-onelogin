@@ -31,6 +31,55 @@ public class ExpoGeetestOneloginModule: Module {
         "value": value
       ])
     }
+      
+    Function("setLogEnable") { (isLogEnable: Bool) in
+        OneLoginPro.setLogEnabled(isLogEnable)
+    }
+    Function("setRequestTimeout") { (preGetTokenTimeout: Int, requestTokenTimeout: Int) in
+      OneLoginPro.setRequestTimeout(TimeInterval(preGetTokenTimeout),requestTokenTimeout: TimeInterval(requestTokenTimeout))
+    }
+
+    Function("register") { (appId: String) in
+      OneLoginPro.register(withAppID: appId)
+    }
+    AsyncFunction("requestTokenWithViewController") { (oneLoginThemeConfig: RNOLAuthViewModel, promise: Promise) in
+      let viewModel = OLAuthViewModel()
+//      viewModel.viewLifeCycleBlock = { (viewLifeCycle: String, animated: Bool) in
+//        self.sendEvent("onChange", [viewLifeCycle: viewLifeCycle])
+//      }
+//      if ((oneLoginThemeConfig.statusBar) != nil) {
+//        switch oneLoginThemeConfig.statusBar?.statusBarStyle {
+//          case "UserInterfaceStyle.LIGHT":
+//            viewModel.statusBarStyle = UIStatusBarStyle.lightContent
+//          case "UserInterfaceStyle.DARK":
+//            viewModel.statusBarStyle = UIStatusBarStyle.darkContent
+//          default:
+//            viewModel.statusBarStyle = UIStatusBarStyle.default
+//        }
+//      }
+      
+      
+      
+      
+      // Find the nearest view controller
+      var controller = UIApplication.shared.windows.filter {$0.isKeyWindow}.first?.rootViewController;
+      var presentedController = controller?.presentedViewController;
+      while (presentedController != nil && !presentedController!.isBeingDismissed) {
+        controller = presentedController;
+        presentedController = controller?.presentedViewController;
+      }
+      if (controller != nil) {
+        OneLoginPro.requestToken(with: controller!, viewModel: viewModel, completion: {_ in
+          promise.resolve(true)
+        })
+      }
+    }
+    
+    AsyncFunction("dismissAuthViewController") { (animated: Bool, promise: Promise) in
+      OneLoginPro.dismissAuthViewController(animated, completion: {
+        promise.resolve(true)
+      })
+    }
 
     // Enables the module to be used as a native view. Definition components that are accepted as part of the
     // view definition: Prop, Events.

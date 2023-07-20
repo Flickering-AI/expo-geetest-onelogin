@@ -24,7 +24,7 @@ class RNOneLoginThemeConfigStatusBar : Record {
   @ColorInt
   val statusBarColor: Int = 0
   @Field
-  val navigationBarStyle: String = "UserInterfaceStyle.UNSPECIFIED"
+  val statusBarStyle: String = "UserInterfaceStyle.UNSPECIFIED"
   @Field
   val bgLayoutInStatusBar: Boolean = false
 }
