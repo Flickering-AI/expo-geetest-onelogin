@@ -1,5 +1,7 @@
-export type ChangeEventPayload = {
-  value: string;
+export type ChangeEventPayload<T> = {
+  type?: string;
+  callbackId?: string;
+  result?: T;
 };
 
 export type ExpoGeetestOneloginViewProps = {

@@ -265,6 +265,11 @@ struct RNOneLoginThemeConfigPrivacyClauseViewTypeface: Record {
 
 struct RNOLAuthViewModelNSAttributedString: Record {
     @Field var backgroundColor: String;
+    @Field var string: String;
+    
+    func build() -> NSAttributedString {
+        return NSAttributedString(string: string, attributes: [NSAttributedString.Key.backgroundColor : backgroundColor])
+    }
 }
 
 struct RNOLAuthViewModelOLRect: Record {
@@ -329,15 +334,68 @@ struct RNOLAuthViewModelOLRect: Record {
      控件大小，只有宽度、高度同时大于0，设置的size才会生效，否则为控件默认的size
      */
     @Field var size: CGSize = CGSize.zero;
+    
+    func build() -> OLRect {
+        return OLRect(portraitTopYOffset: portraitTopYOffset, portraitCenterXOffset: portraitCenterXOffset, portraitLeftXOffset: portraitLeftXOffset, landscapeTopYOffset: landscapeTopYOffset, landscapeCenterXOffset: landscapeCenterXOffset, landscapeLeftXOffset: landscapeLeftXOffset, size: size)
+    }
 }
-struct RNOLAuthViewModelUIFontDescriptor {
+struct RNOLAuthViewModelUIFontDescriptor: Record {
     @Field var textStyle: String = ""
     @Field var size: CGFloat = 24
 }
-struct RNOLAuthViewModelUIFont {
+struct RNOLAuthViewModelUIFont: Record {
     @Field var name: String = ""
     @Field var size: CGFloat = 24
     @Field var fontAttributes: RNOLAuthViewModelUIFontDescriptor? = nil
+    func build() -> UIFont {
+        return UIFont(name: name, size: size)!
+    }
+}
+struct RNUImage: Record {
+    @Field var named: String?
+    func build() -> UIImage {
+        let image = UIImage.init(named: named!)!
+        return image
+    }
+}
+struct RNUIImageView: Record {
+    @Field var frame: CGRect?
+    @Field var uiImage: RNUImage?
+    func build() -> UIImageView {
+        let imageView = UIImageView.init(frame: frame!)
+        imageView.image = uiImage?.build()
+        return imageView
+    }
+}
+struct RNUIButton: Record {
+    @Field var frame: CGRect?
+    @Field var uiImage: RNUImage?
+    @Field var callbackId: Int?
+    func build() -> UIButton {
+        let button = UIButton.init(frame: frame!)
+        button.setImage(uiImage?.build(), for: UIControl.State.normal)
+        if (callbackId != nil) {
+            button.tag = callbackId!
+        }
+        return button
+    }
+}
+struct RNOLPrivacyTermItem: Record {
+    @Field var title: String?
+    @Field var linkURL: URL?
+    func build() -> OLPrivacyTermItem {
+        return OLPrivacyTermItem.init(title: title!, linkURL: linkURL!)
+    }
+}
+struct RNNSAttributedStringKey: Record {
+    @Field var foregroundColor: UIColor = UIColor.clear
+    @Field var backgroundColor: UIColor = UIColor.clear
+    func build() -> Dictionary<NSAttributedString.Key, Any> {
+        return [NSAttributedString.Key.foregroundColor: foregroundColor, NSAttributedString.Key.backgroundColor: backgroundColor]
+    }
+}
+struct RNFunction: Record {
+    @Field var callbackId: Int
 }
 
 struct RNOLAuthViewModel: Record {
@@ -346,14 +404,14 @@ struct RNOLAuthViewModel: Record {
     /**
      状态栏样式。 默认 `UIStatusBarStyleDefault`。
      */
-    @Field var statusBarStyle: String; // UIStatusBarStyle 
+    @Field var statusBarStyle: String?; // UIStatusBarStyle
 
     // Navigation/导航
 
     /**
      导航栏标题距离屏幕左右两边的间距。默认为36，隐私条款导航栏保持一致。
      */
-    @Field var navTextMargin: Double = 0;
+    @Field var navTextMargin: Double?;
     /**
      授权页导航的标题。默认为空字符串。
      */
@@ -367,7 +425,7 @@ struct RNOLAuthViewModel: Record {
     /**
      授权页导航左边的返回按钮的图片。默认黑色系统样式返回图片。
      */
-    @Field var naviBackImage: String = "";
+    @Field var naviBackImage: RNUImage?;
 
     /**
      授权页导航右边的自定义控件。
@@ -377,17 +435,17 @@ struct RNOLAuthViewModel: Record {
     /**
      导航栏隐藏。默认不隐藏。
      */
-    @Field var naviHidden: Bool = false;
+    @Field var naviHidden: Bool?;
 
     /**
      返回按钮位置及大小，返回按钮最大size为CGSizeMake(40, 40)。
      */
-    @Field var backButtonRect: RNOLAuthViewModelOLRect;
+    @Field var backButtonRect: RNOLAuthViewModelOLRect?;
 
     /**
      返回按钮隐藏。默认不隐藏。
      */
-    @Field var backButtonHidden: Bool;
+    @Field var backButtonHidden: Bool?;
 
     /**
      * 点击授权页面返回按钮的回调
@@ -399,7 +457,7 @@ struct RNOLAuthViewModel: Record {
     /**
      授权页面上展示的图标。默认为 "OneLogin" 图标。
      */
-    @Field var appLogo: String = "";
+    @Field var appLogo: RNUImage? = nil;
 
     /**
      Logo 位置及大小。
@@ -409,19 +467,19 @@ struct RNOLAuthViewModel: Record {
     /**
      Logo 图片隐藏。默认不隐藏。
      */
-    @Field var logoHidden: Bool = false;
+    @Field var logoHidden: Bool? = nil;
 
     /**
      logo圆角，默认为0。
      */
-    @Field var logoCornerRadius: CGFloat = 0;
+    @Field var logoCornerRadius: CGFloat?;
 
     // Phone Number Preview/手机号预览
 
     /**
      号码预览文字的颜色。默认黑色。
      */
-    @Field var phoneNumColor: UIColor = UIKit.UIColor.clear;
+    @Field var phoneNumColor: UIColor?;
 
     /**
      号码预览文字的字体。默认粗体，24pt。
@@ -443,12 +501,12 @@ struct RNOLAuthViewModel: Record {
     /**
      授权页切换账号按钮的文案。默认为“切换账号”。
      */
-    @Field var switchButtonText: String = "切换账号";
+    @Field var switchButtonText: String?;
 
     /**
      授权页切换账号按钮的颜色。默认蓝色。
      */
-    @Field var switchButtonColor: UIColor = UIKit.UIColor.clear
+    @Field var switchButtonColor: UIColor?
 
     /**
      授权页切换账号按钮背景颜色。默认为 nil。
@@ -463,7 +521,7 @@ struct RNOLAuthViewModel: Record {
     /**
      授权页切换账号按钮 位置及大小。
      */
-    @Field var switchButtonRect: RNOLAuthViewModelOLRect;
+    @Field var switchButtonRect: RNOLAuthViewModelOLRect?;
 
     /**
      隐藏切换账号按钮。默认不隐藏。
@@ -473,14 +531,14 @@ struct RNOLAuthViewModel: Record {
     /**
      * 点击授权页面切换账号按钮的回调
      */
-//    @property (nullable, nonatomic, copy) OLClickSwitchButtonBlock clickSwitchButtonBlock;
+    @Field var clickSwitchButtonBlock: RNFunction?;
 
     // Authorization Button/认证按钮
 
     /**
      授权页认证按钮的背景图片, @[正常状态的背景图片, 不可用状态的背景图片, 高亮状态的背景图片]。默认正常状态为蓝色纯色, 不可用状态的背景图片时为灰色, 高亮状态为灰蓝色。
      */
-    @Field var authButtonImages: Array<String>;
+    @Field var authButtonImages: Array<RNUImage>?;
 
     /**
      授权按钮文案。默认白色的"一键登录"。
@@ -500,7 +558,7 @@ struct RNOLAuthViewModel: Record {
     /**
      * 点击授权页面授权按钮的回调，用于监听授权页面登录按钮的点击
      */
-//    @property (nullable, nonatomic, copy) OLClickAuthButtonBlock clickAuthButtonBlock;
+    @Field var clickAuthButtonBlock: RNFunction?;
 
     /**
      * 未勾选隐私条款时点击授权页面登录按钮的回调, 可用于自定义授权弹窗. 当返回 YES 时, 可以在 block 中添加自定义操作
@@ -522,7 +580,7 @@ struct RNOLAuthViewModel: Record {
     /**
      Slogan 位置及大小。
      */
-    @Field var sloganRect: OLRect?;
+    @Field var sloganRect: RNOLAuthViewModelOLRect?;
 
     /**
      Slogan 文字颜色。默认灰色。
@@ -539,17 +597,17 @@ struct RNOLAuthViewModel: Record {
     /**
      授权页面上条款勾选框初始状态。默认 NO。
      */
-    @Field var defaultCheckBoxState: Bool;
+    @Field var defaultCheckBoxState: Bool?;
 
     /**
      授权页面上勾选框勾选的图标。默认为蓝色图标。推荐尺寸为12x12。
      */
-    @Field var checkedImage: String;
+    @Field var checkedImage: RNUImage?;
 
     /**
      授权页面上勾选框未勾选的图标。默认为白色图标。推荐尺寸为12x12。
      */
-    @Field var uncheckedImage: String;
+    @Field var uncheckedImage: RNUImage?;
 
     /**
      授权页面上条款勾选框大小及位置，请不要设置勾选框的横向偏移，整体隐私条款的横向偏移，请通过 termsRect 设置
@@ -559,12 +617,12 @@ struct RNOLAuthViewModel: Record {
     /**
      隐私条款文字属性。默认基础文字灰色, 条款蓝色高亮, 12pt。
      */
-    @Field var privacyTermsAttributes: String?;
+    @Field var privacyTermsAttributes: RNNSAttributedStringKey?;
 
     /**
      额外的条款。默认为空。
      */
-    @Field var additionalPrivacyTerms: String?;
+    @Field var additionalPrivacyTerms: Array<RNOLPrivacyTermItem>?;
 
     /**
      服务条款普通文字的颜色。默认灰色。
@@ -574,7 +632,7 @@ struct RNOLAuthViewModel: Record {
     /**
      隐私条款 位置及大小，隐私条款，宽需大于50，高需大于20，才会生效。
      */
-    @Field var termsRect: RNOLAuthViewModelOLRect;
+    @Field var termsRect: RNOLAuthViewModelOLRect?;
 
     /**
      除隐私条款外的其他文案，数组大小必须 >= 4，元素依次为：条款前的文案、条款一和条款二连接符、条款二和条款三连接符、条款三和条款四连接符、……，条款后的文案。
@@ -655,7 +713,7 @@ struct RNOLAuthViewModel: Record {
     /**
      授权页面背景图片
      */
-    @Field var backgroundImage: String;
+    @Field var backgroundImage: RNUImage?;
 
     /**
      横屏模式授权页面背景图片
@@ -906,7 +964,7 @@ struct RNOLAuthViewModel: Record {
     /**
      未勾选服务条款复选框时，点击登录按钮的提示。默认为"请同意服务条款"。
      */
-    @Field var notCheckProtocolHint: String;
+    @Field var notCheckProtocolHint: String?;
 
     // OLAuthViewLifeCycleBlock
 
@@ -950,4 +1008,8 @@ struct RNOLAuthViewModel: Record {
      * UIUserInterfaceStyleDark        - 暗黑 仅对 iOS 13+ 系统有效
      */
     @Field var userInterfaceStyle: String;
+    
+    @Field var backgroundImageView: RNUIImageView?;
+    @Field var floatGoBackImageViewButton: RNUIButton?;
+    @Field var customViews: Array<RNUIButton>?;
 }
