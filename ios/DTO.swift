@@ -374,6 +374,7 @@ struct RNUIButton: Record {
     func build() -> UIButton {
         let button = UIButton.init(frame: frame!)
         button.setImage(uiImage?.build(), for: UIControl.State.normal)
+        button.adjustsImageWhenHighlighted = false
         if (callbackId != nil) {
             button.tag = callbackId!
         }
