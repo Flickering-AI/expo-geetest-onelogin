@@ -964,3 +964,7 @@ export function dismiss(animated?: boolean) {
 export function setRequestTimeout(preGetTokenTimeout: number = 8000, requestTokenTimeout: number = 8000) {
   return ExpoGeetestOneloginModule.setRequestTimeout(preGetTokenTimeout, requestTokenTimeout);
 }
+
+export function stopLoading() {
+  return ExpoGeetestOneloginModule.stopLoading();
+}

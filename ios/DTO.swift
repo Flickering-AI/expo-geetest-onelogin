@@ -390,14 +390,29 @@ struct RNOLPrivacyTermItem: Record {
 struct RNNSAttributedStringKey: Record {
     @Field var foregroundColor: UIColor = UIColor.clear
     @Field var backgroundColor: UIColor = UIColor.clear
+    @Field var paragraphStyle: RNNSMutableParagraphStyle?
     func build() -> Dictionary<NSAttributedString.Key, Any> {
-        return [NSAttributedString.Key.foregroundColor: foregroundColor, NSAttributedString.Key.backgroundColor: backgroundColor]
+        return [NSAttributedString.Key.foregroundColor: foregroundColor, NSAttributedString.Key.backgroundColor: backgroundColor, NSAttributedString.Key.paragraphStyle: paragraphStyle?.build() ?? NSMutableParagraphStyle.init()]
     }
 }
 struct RNFunction: Record {
     @Field var callbackId: Int
 }
-
+struct RNNSMutableParagraphStyle: Record {
+    @Field var lineSpacing: CGFloat?
+    @Field var paragraphSpacing: CGFloat?
+    @Field var firstLineHeadIndent: CGFloat?
+    var alignment: NSTextAlignment = NSTextAlignment.left
+    func build() -> NSMutableParagraphStyle {
+        let style = NSMutableParagraphStyle.init()
+        style.lineSpacing = lineSpacing ?? 1.33
+        style.paragraphSpacing = 0
+        style.lineBreakMode = NSLineBreakMode.byWordWrapping
+        style.firstLineHeadIndent = 0
+        style.alignment = alignment
+        return style
+    }
+}
 struct RNOLAuthViewModel: Record {
     // Status Bar/状态栏
 
@@ -658,12 +673,12 @@ struct RNOLAuthViewModel: Record {
     /**
      * 是否在运营商协议名称上加书名号《》
      */
-    @Field var hasQuotationMarkOnCarrierProtocol: Bool;
+    @Field var hasQuotationMarkOnCarrierProtocol: Bool?;
 
     /**
      * 未勾选勾选框时，是否禁止一键登录按钮的点击
      */
-    @Field var disableAuthButtonWhenUnchecked: Bool;
+    @Field var disableAuthButtonWhenUnchecked: Bool?;
 
     /**
      * 未勾选授权页面隐私协议前勾选框时，点击授权页面登录按钮时提示 block
@@ -945,7 +960,7 @@ struct RNOLAuthViewModel: Record {
     /**
      服务条款页面导航栏隐藏。默认不隐藏。
      */
-    @Field var webNaviHidden: Bool;
+    @Field var webNaviHidden: Bool?;
 
     /**
      服务条款页面导航栏的标题，默认与协议名称保持一致，粗体、17pt。

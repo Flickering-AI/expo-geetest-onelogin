@@ -49,6 +49,14 @@ public class ExpoGeetestOneloginModule: Module {
     
     Function("requestTokenWithViewController") { (viewModelRN: RNOLAuthViewModel, callbackId: Int) in
       DispatchQueue.main.async {
+        // Find the nearest view controller
+        var controller = UIApplication.shared.windows.filter {$0.isKeyWindow}.first?.rootViewController;
+        var presentedController = controller?.presentedViewController;
+        while (presentedController != nil && !presentedController!.isBeingDismissed) {
+          controller = presentedController;
+          presentedController = controller?.presentedViewController;
+        }
+        
         let viewModel = OLAuthViewModel()
         if (viewModelRN.statusBarStyle != nil) {
           switch viewModelRN.statusBarStyle {
@@ -179,8 +187,29 @@ public class ExpoGeetestOneloginModule: Module {
         if (viewModelRN.switchButtonRect != nil) {
           viewModel.switchButtonRect =  viewModelRN.switchButtonRect!.build()
         }
+        if (viewModelRN.switchButtonRect != nil) {
+          viewModel.switchButtonRect =  viewModelRN.switchButtonRect!.build()
+        }
         if (viewModelRN.sloganRect != nil) {
           viewModel.sloganRect =  viewModelRN.sloganRect!.build()
+        }
+        if (viewModelRN.phoneNumRect != nil) {
+          viewModel.phoneNumRect =  viewModelRN.phoneNumRect!.build()
+        }
+        if (viewModelRN.webNaviTitle != nil) {
+          viewModel.webNaviTitle =  viewModelRN.webNaviTitle!.build()
+        }
+        if (viewModelRN.webNaviHidden != nil) {
+          viewModel.webNaviHidden =  viewModelRN.webNaviHidden!
+        }
+        if (viewModelRN.webNaviBgColor != nil) {
+          viewModel.webNaviBgColor =  viewModelRN.webNaviBgColor!
+        }
+        if (viewModelRN.hasQuotationMarkOnCarrierProtocol != nil) {
+          viewModel.hasQuotationMarkOnCarrierProtocol =  viewModelRN.hasQuotationMarkOnCarrierProtocol!
+        }
+        if (viewModelRN.disableAuthButtonWhenUnchecked != nil) {
+          viewModel.disableAuthButtonWhenUnchecked =  viewModelRN.disableAuthButtonWhenUnchecked!
         }
         viewModel.customUIHandler = { (customAreaView: UIView) in
           if (viewModelRN.backgroundImageView != nil) {
@@ -236,6 +265,33 @@ public class ExpoGeetestOneloginModule: Module {
         viewModel.viewLifeCycleBlock = { (viewLifeCycle: String, animated: Bool) in
           self.sendEvent("onChange", [viewLifeCycle: viewLifeCycle])
         }
+        // -------------- 授权页面点击登录按钮之后的loading设置 -------------------
+        let mask = UIView(frame: CGRect(x: 0, y: 0, width: controller!.view.bounds.width, height: controller!.view.bounds.height))
+        mask.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
+        let indicatorView = UIActivityIndicatorView.init(style: UIActivityIndicatorView.Style.large)
+        indicatorView.color = UIColor.white
+        let loadingContainer = UIView(frame: CGRect(x: 0, y: 0, width: 120, height: 120))
+        loadingContainer.center = CGPoint.init(x: mask.bounds.size.width/2, y: mask.bounds.size.height/2)
+        loadingContainer.layer.cornerRadius = 15
+        loadingContainer.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.9)
+        loadingContainer.addSubview(indicatorView)
+        mask.addSubview(loadingContainer)
+        viewModel.loadingViewBlock = { (containerView: UIView) in
+            if OneLogin.isProtocolCheckboxChecked() {
+              containerView.addSubview(mask)
+              indicatorView.center = CGPoint.init(x: loadingContainer.bounds.size.width/2, y: loadingContainer.bounds.size.height/2)
+                indicatorView.startAnimating()
+            }
+        }
+            
+        viewModel.stopLoadingViewBlock = { (containerView: UIView) in
+            for subview in containerView.subviews {
+                if subview == mask {
+                    subview.removeFromSuperview()
+                    break
+                }
+            }
+        }
   //      if ((oneLoginThemeConfig.statusBar) != nil) {
   //        switch oneLoginThemeConfig.statusBar?.statusBarStyle {
   //          case "UserInterfaceStyle.LIGHT":
@@ -247,15 +303,6 @@ public class ExpoGeetestOneloginModule: Module {
   //        }
   //      }
         
-        
-        
-        // Find the nearest view controller
-        var controller = UIApplication.shared.windows.filter {$0.isKeyWindow}.first?.rootViewController;
-        var presentedController = controller?.presentedViewController;
-        while (presentedController != nil && !presentedController!.isBeingDismissed) {
-          controller = presentedController;
-          presentedController = controller?.presentedViewController;
-        }
         if (controller != nil) {
           OneLoginPro.requestToken(with: controller!, viewModel: viewModel, completion: { result in
             self.callback(callbackId: callbackId, params: ["result": result])
@@ -268,6 +315,9 @@ public class ExpoGeetestOneloginModule: Module {
       OneLoginPro.dismissAuthViewController(animated, completion: {
         promise.resolve(true)
       })
+    }
+    Function("stopLoading") { () in
+      OneLoginPro.stopLoading()
     }
 
     // Enables the module to be used as a native view. Definition components that are accepted as part of the
