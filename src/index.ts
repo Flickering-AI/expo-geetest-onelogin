@@ -930,7 +930,9 @@ function functionToCallbackId(callback: Function): number {
 addChangeListener((data) => {
   console.log("addChangeListener", data);
   if (data.type === "callback") {
-    callbackMap[data.callbackId]?.(data?.result);
+    if (callbackMap[data.callbackId]?.(data?.result)) {
+      delete callbackMap[data.callbackId]
+    }
   }
 });
 
@@ -946,7 +948,7 @@ type RNFunction = {
   onClick?: () => void
 }
 
-export function dismiss(animated?: boolean) {
+export async function dismiss(animated?: boolean) {
   if(Platform.OS === 'android') {
     return ExpoGeetestOneloginModule.dismissAuthActivity();
   }
