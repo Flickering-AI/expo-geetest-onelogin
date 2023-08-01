@@ -1,7 +1,10 @@
 package expo.modules.geetestonelogin
 
+import android.graphics.Color
 import android.graphics.Typeface
+import android.widget.FrameLayout
 import com.geetest.onelogin.OneLoginHelper
+import com.geetest.onelogin.config.AuthRegisterViewConfig
 import com.geetest.onelogin.config.OneLoginThemeConfig
 import com.geetest.onelogin.config.UserInterfaceStyle
 import com.geetest.onelogin.listener.AbstractOneLoginListener
@@ -60,10 +63,15 @@ class ExpoGeetestOneloginModule : Module() {
         .register(appId)
     }
 
+    Function("isPreGetTokenResultValidate") {
+      return@Function OneLoginHelper
+        .with().isPreGetTokenResultValidate
+    }
+
     AsyncFunction("requestToken") { oneLoginThemeConfig: RNOneLoginThemeConfig?, promise: Promise ->
       val themeBuilder = OneLoginThemeConfig.Builder()
       if (oneLoginThemeConfig?.statusBar != null) {
-        themeBuilder.setStatusBar(oneLoginThemeConfig.statusBar.statusBarColor, when (oneLoginThemeConfig.statusBar.navigationBarStyle) {
+        themeBuilder.setStatusBar(oneLoginThemeConfig.statusBar.statusBarColor, when (oneLoginThemeConfig.statusBar.statusBarStyle) {
           "UserInterfaceStyle.LIGHT" -> UserInterfaceStyle.LIGHT
           "UserInterfaceStyle.DARK" -> UserInterfaceStyle.DARK
           else -> UserInterfaceStyle.UNSPECIFIED
@@ -201,6 +209,18 @@ class ExpoGeetestOneloginModule : Module() {
       }
       if (oneLoginThemeConfig?.sloganViewTypeface != null) {
         themeBuilder.setSloganViewTypeface(Typeface.createFromAsset(context.assets, oneLoginThemeConfig.sloganViewTypeface))
+      }
+      if (oneLoginThemeConfig?.customViews != null) {
+
+        val authRegisterViewConfigBuilder = AuthRegisterViewConfig.Builder()
+        val frameLayout = FrameLayout(appContext.reactContext!!)
+        frameLayout.layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT)
+//        frameLayout.setBackgroundColor(Color.RED)
+
+        oneLoginThemeConfig.customViews.map { frameLayout.addView(it.build(appContext.reactContext!!)) }
+        authRegisterViewConfigBuilder.setView(oneLoginThemeConfig.customViews[0].build(appContext.reactContext!!))
+        authRegisterViewConfigBuilder.setRootViewId(AuthRegisterViewConfig.RootViewId.ROOT_VIEW_ID_BODY)
+        OneLoginHelper.with().addOneLoginRegisterViewConfig("custom_views", authRegisterViewConfigBuilder.build())
       }
       OneLoginHelper
         .with().requestToken(themeBuilder.build(), object : AbstractOneLoginListener() {

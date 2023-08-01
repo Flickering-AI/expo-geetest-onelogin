@@ -1,5 +1,8 @@
 package expo.modules.geetestonelogin
 
+import android.content.Context
+import android.graphics.Color
+import android.widget.ImageView
 import androidx.annotation.ColorInt
 import expo.modules.kotlin.records.Field
 import expo.modules.kotlin.records.Record
@@ -20,8 +23,7 @@ fun JSONObject.toMap(): Map<String, *> = keys().asSequence().associateWith {
 }
 
 class RNOneLoginThemeConfigStatusBar : Record {
-  @Field
-  @ColorInt
+  @Field @ColorInt
   val statusBarColor: Int = 0
   @Field
   val statusBarStyle: String = "UserInterfaceStyle.UNSPECIFIED"
@@ -47,8 +49,7 @@ class RNOneLoginThemeConfigDialogTheme : Record {
 }
 
 class RNOneLoginThemeConfigAuthNavLayout : Record {
-  @Field
-  @ColorInt
+  @Field @ColorInt
   val navColor: Int = 0
   @Field
   val authNavHeight: Int = 0
@@ -61,8 +62,7 @@ class RNOneLoginThemeConfigAuthNavLayout : Record {
 class RNOneLoginThemeConfigAuthNavTextView : Record {
   @Field
   val navText: String = ""
-  @Field
-  @ColorInt
+  @Field @ColorInt
   val navTextColor: Int = 0
   @Field
   val navTextSize: Int = 0
@@ -70,8 +70,7 @@ class RNOneLoginThemeConfigAuthNavTextView : Record {
   val navWebTextNormal: Boolean = false
   @Field
   val navWebText: String = ""
-  @Field
-  @ColorInt
+  @Field @ColorInt
   val navWebTextColor: Int = 0
   @Field
   val navWebTextSize: Int = 0
@@ -91,8 +90,7 @@ class RNOneLoginThemeConfigSwitchViewLayout : Record {
 class RNOneLoginThemeConfigLogBtnTextView : Record {
   @Field
   val logBtnText: String = ""
-  @Field
-  @ColorInt
+  @Field @ColorInt
   val logBtnColor: Int = 0
   @Field
   val logBtnTextSize: Int = 0
@@ -102,7 +100,6 @@ class RNOneLoginThemeConfigLogBtnLoadingView : Record {
   @Field
   val loadingView: String = ""
   @Field
-  @ColorInt
   val loadingViewWidth: Int = 0
   @Field
   val loadingViewHeight: Int = 0
@@ -126,11 +123,9 @@ class RNOneLoginThemeConfigPrivacyClauseText : Record {
 }
 
 class RNOneLoginThemeConfigPrivacyClauseView: Record {
-  @Field
-  @ColorInt
+  @Field @ColorInt
   val baseClauseColor: Int = 0
-  @Field
-  @ColorInt
+  @Field @ColorInt
   val clauseColor: Int = 0
   @Field
   val privacyClauseTextSize: Int = 0
@@ -185,8 +180,7 @@ class RNOneLoginThemeConfigAuthNavReturnImgView: Record {
 }
 
 class RNOneLoginThemeConfigNumberView: Record {
-  @Field
-  @ColorInt
+  @Field @ColorInt
   val numberColor: Int = 0
   @Field
   val numberSize: Int = 0
@@ -199,8 +193,7 @@ class RNOneLoginThemeConfigNumberView: Record {
 }
 
 class RNOneLoginThemeConfigSloganView: Record {
-  @Field
-  @ColorInt
+  @Field @ColorInt
   val sloganColor: Int = 0
   @Field
   val sloganSize: Int = 0
@@ -232,8 +225,7 @@ class RNOneLoginThemeConfigLogBtnLayout: Record {
 class RNOneLoginThemeConfigSwitchView: Record {
   @Field
   val switchText: String = ""
-  @Field
-  @ColorInt
+  @Field @ColorInt
   val switchColor: Int = 0
   @Field
   val switchSize: Int = 0
@@ -284,6 +276,28 @@ class RNOneLoginThemeConfigPrivacyClauseViewTypeface: Record {
   val privacyClauseBaseTypeface: String = ""
   @Field
   val privacyClauseTypeface: String = ""
+}
+
+class RNImageView: Record {
+  @Field
+  val x: Float = 0f
+  @Field
+  val y: Float = 0f
+  @Field
+  val maxWidth: Int = 0
+  @Field
+  val maxHeight: Int = 0
+  @Field
+  val imageResourceName: String = ""
+  fun build(context: Context): ImageView {
+    val imageView = ImageView(context)
+    imageView.maxWidth = maxWidth
+    imageView.maxHeight = maxHeight
+    imageView.x = x
+    imageView.y = y
+    imageView.setImageResource(context.resources.getIdentifier(imageResourceName, "drawable", context.packageName))
+    return imageView
+  }
 }
 
 class RNOneLoginThemeConfig : Record {
@@ -341,4 +355,6 @@ class RNOneLoginThemeConfig : Record {
   val privacyClauseViewTypeface: RNOneLoginThemeConfigPrivacyClauseViewTypeface? = null
   @Field
   val sloganViewTypeface: String? = null
+  @Field
+  val customViews: Array<RNImageView>? = null
 }
