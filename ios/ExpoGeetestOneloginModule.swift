@@ -61,7 +61,9 @@ public class ExpoGeetestOneloginModule: Module {
         if (viewModelRN.statusBarStyle != nil) {
           switch viewModelRN.statusBarStyle {
             case "UIStatusBarStyle.darkContent":
-              viewModel.statusBarStyle = UIStatusBarStyle.darkContent
+              if #available(iOS 13.0, *) {
+                  viewModel.statusBarStyle = UIStatusBarStyle.darkContent
+              }
             case "UIStatusBarStyle.lightContent":
               viewModel.statusBarStyle = UIStatusBarStyle.lightContent
             default:
@@ -268,19 +270,24 @@ public class ExpoGeetestOneloginModule: Module {
         // -------------- 授权页面点击登录按钮之后的loading设置 -------------------
         let mask = UIView(frame: CGRect(x: 0, y: 0, width: controller!.view.bounds.width, height: controller!.view.bounds.height))
         mask.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
-        let indicatorView = UIActivityIndicatorView.init(style: UIActivityIndicatorView.Style.large)
-        indicatorView.color = UIColor.white
+          let indicatorView: UIActivityIndicatorView?
+          if #available(iOS 13.0, *) {
+              indicatorView = UIActivityIndicatorView.init(style: UIActivityIndicatorView.Style.large)
+          } else {
+              indicatorView = UIActivityIndicatorView.init(style: UIActivityIndicatorView.Style.whiteLarge)
+          }
+        indicatorView!.color = UIColor.white
         let loadingContainer = UIView(frame: CGRect(x: 0, y: 0, width: 120, height: 120))
         loadingContainer.center = CGPoint.init(x: mask.bounds.size.width/2, y: mask.bounds.size.height/2)
         loadingContainer.layer.cornerRadius = 15
         loadingContainer.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.9)
-        loadingContainer.addSubview(indicatorView)
+        loadingContainer.addSubview(indicatorView!)
         mask.addSubview(loadingContainer)
         viewModel.loadingViewBlock = { (containerView: UIView) in
             if OneLogin.isProtocolCheckboxChecked() {
               containerView.addSubview(mask)
-              indicatorView.center = CGPoint.init(x: loadingContainer.bounds.size.width/2, y: loadingContainer.bounds.size.height/2)
-                indicatorView.startAnimating()
+              indicatorView!.center = CGPoint.init(x: loadingContainer.bounds.size.width/2, y: loadingContainer.bounds.size.height/2)
+                indicatorView!.startAnimating()
             }
         }
             
@@ -318,6 +325,9 @@ public class ExpoGeetestOneloginModule: Module {
     }
     Function("stopLoading") { () in
       OneLoginPro.stopLoading()
+    }
+    Function("renewPreGetToken") { () in
+      OneLoginPro.renewPreGetToken()
     }
 
     // Enables the module to be used as a native view. Definition components that are accepted as part of the
