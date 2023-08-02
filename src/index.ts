@@ -55,161 +55,186 @@ export function isPreGetTokenResultValidate(): boolean {
     return ExpoGeetestOneloginModule.isPreGetTokenResultValidate();
 }
 
-export async function requestToken(oneLoginThemeConfig?: {
-    statusBar?: {
-        statusBarColor: ColorValue;
-        navigationBarStyle:
-            | 'UserInterfaceStyle.UNSPECIFIED'
-            | 'UserInterfaceStyle.LIGHT'
-            | 'UserInterfaceStyle.DARK';
-        bgLayoutInStatusBar: boolean;
-    };
-    authBGImgPath?: string;
-    dialogTheme?: {
-        isDialogTheme: boolean;
-        dialogWidth: number;
-        dialogHeight: number;
-        dialogX: number;
-        dialogY: number;
-        isDialogBottom: boolean;
-        isWebViewDialogTheme: boolean;
-    };
-    authNavLayout?: {
-        navColor: ColorValue;
-        authNavHeight: number;
-        authNavTransparent: boolean;
-        authNavGone: boolean;
-    };
-    authNavTextView?: {
-        navText: string;
-        navTextColor: ColorValue;
-        navTextSize: number;
-        navWebTextNormal: boolean;
-        navWebText: string;
-        navWebTextColor: ColorValue;
-        navWebTextSize: number;
-    };
-    switchViewLayout?: {
-        switchImgPath: string;
-        switchWidth: number;
-        switchHeight: number;
-    };
-    logBtnTextView?: {
-        logBtnText: string;
-        logBtnColor: ColorValue;
-        logBtnTextSize: number;
-    };
-    logBtnLoadingView?: {
-        loadingView: string;
-        loadingViewWidth: number;
-        loadingViewHeight: number;
-        loadingViewOffsetRight: number;
-    };
-    privacyUnCheckedToastText?: string;
-    privacyClauseText?: {
-        clauseNameOne: string;
-        clauseUrlOne: string;
-        clauseNameTwo: string;
-        clauseUrlTwo: string;
-        clauseNameThree: string;
-        clauseUrlThre: string;
-    };
-    privacyTextGravity?: 'Gravity.CENTER_HORIZONTAL' | number; // android.view.Gravity
-    privacyClauseView?: {
-        baseClauseColor: ColorValue;
-        clauseColor: ColorValue;
-        privacyClauseTextSize: number;
-    };
-    privacyTextView?: {
-        privacyTextViewTv1: string;
-        privacyTextViewTv2: string;
-        privacyTextViewTv3: string;
-        privacyTextViewTv4: string;
-    };
-    authNavTextViewTypeface?: {
-        navTextTypeface: string;
-        navWebTextTypeface: string;
-    };
-    numberViewTypeface?: string;
-    switchViewTypeface?: string;
-    logBtnTextViewTypeface?: string;
-    logoImgView?: {
-        logoImgPath: string;
-        logoWidth: number;
-        logoHeight: number;
-        logoHidden: boolean;
-        logoOffsetY: number;
-        logoOffsetY_B: number;
-        logoOffsetX: number;
-    };
-    authNavReturnImgView?: {
-        returnImgPath: string;
-        returnImgWidth: number;
-        returnImgHeight: number;
-        returnImgHidden: boolean;
-        returnImgOffsetX: number;
-    };
-    numberView?: {
-        numberColor: ColorValue;
-        numberSize: number;
-        numberOffsetY: number;
-        numberOffsetY_B: number;
-        numberOffsetX: number;
-    };
-    sloganView?: {
-        sloganColor: ColorValue;
-        sloganSize: number;
-        sloganOffsetY: number;
-        sloganOffsetY_B: number;
-        sloganOffsetX: number;
-    };
-    logBtnLayout?: {
-        logBtnImgPath: string;
-        logBtnUncheckedImgPath: string;
-        logBtnWidth: number;
-        logBtnHeight: number;
-        logBtnOffsetY: number;
-        logBtnOffsetY_B: number;
-        logBtnOffsetX: number;
-    };
-    switchView?: {
-        switchText: string;
-        switchColor: ColorValue;
-        switchSize: number;
-        switchHidden: boolean;
-        switchOffsetY: number;
-        switchOffsetY_B: number;
-        switchOffsetX: number;
-    };
-    privacyCheckBox?: {
-        unCheckedImgPath: string;
-        checkedImgPath: string;
-        privacyState: boolean;
-        privacyCheckBoxWidth: number;
-        privacyCheckBoxHeight: number;
-        privacyCheckBoxOffsetY: number;
-        privacyCheckBoxMarginRight: number;
-    };
-    privacyLayout?: {
-        privacyLayoutWidth: number;
-        privacyOffsetY: number;
-        privacyOffsetY_B: number;
-        privacyOffsetX: number;
-        isUseNormalWebActivity: boolean;
-    };
-    sloganViewTypeface?: string;
-    privacyClauseViewTypeface?: {
-        privacyClauseBaseTypeface: string;
-        privacyClauseTypeface: string;
-    };
-    customViews?: {
-        x: number;
-        y: number;
-        maxWidth: number;
-        maxHeight: number;
-        imageResourceName: string;
-    }[];
-}) {
+export async function requestToken(
+    oneLoginThemeConfig?: {
+        statusBar?: {
+            statusBarColor: ColorValue;
+            navigationBarStyle:
+                | 'UserInterfaceStyle.UNSPECIFIED'
+                | 'UserInterfaceStyle.LIGHT'
+                | 'UserInterfaceStyle.DARK';
+            bgLayoutInStatusBar: boolean;
+        };
+        authBGImgPath?: string;
+        dialogTheme?: {
+            isDialogTheme: boolean;
+            dialogWidth: number;
+            dialogHeight: number;
+            dialogX: number;
+            dialogY: number;
+            isDialogBottom: boolean;
+            isWebViewDialogTheme: boolean;
+        };
+        authNavLayout?: {
+            navColor: ColorValue;
+            authNavHeight: number;
+            authNavTransparent: boolean;
+            authNavGone: boolean;
+        };
+        authNavTextView?: {
+            navText: string;
+            navTextColor: ColorValue;
+            navTextSize: number;
+            navWebTextNormal: boolean;
+            navWebText: string;
+            navWebTextColor: ColorValue;
+            navWebTextSize: number;
+        };
+        switchViewLayout?: {
+            switchImgPath: string;
+            switchWidth: number;
+            switchHeight: number;
+        };
+        logBtnTextView?: {
+            logBtnText: string;
+            logBtnColor: ColorValue;
+            logBtnTextSize: number;
+        };
+        logBtnLoadingView?: {
+            loadingView: string;
+            loadingViewWidth: number;
+            loadingViewHeight: number;
+            loadingViewOffsetRight: number;
+        };
+        privacyUnCheckedToastText?: string;
+        privacyClauseText?: {
+            clauseNameOne: string;
+            clauseUrlOne: string;
+            clauseNameTwo: string;
+            clauseUrlTwo: string;
+            clauseNameThree: string;
+            clauseUrlThre: string;
+        };
+        privacyTextGravity?: 'Gravity.CENTER_HORIZONTAL' | number; // android.view.Gravity
+        privacyClauseView?: {
+            baseClauseColor: ColorValue;
+            clauseColor: ColorValue;
+            privacyClauseTextSize: number;
+        };
+        privacyTextView?: {
+            privacyTextViewTv1: string;
+            privacyTextViewTv2: string;
+            privacyTextViewTv3: string;
+            privacyTextViewTv4: string;
+        };
+        authNavTextViewTypeface?: {
+            navTextTypeface: string;
+            navWebTextTypeface: string;
+        };
+        numberViewTypeface?: string;
+        switchViewTypeface?: string;
+        logBtnTextViewTypeface?: string;
+        logoImgView?: {
+            logoImgPath: string;
+            logoWidth: number;
+            logoHeight: number;
+            logoHidden: boolean;
+            logoOffsetY: number;
+            logoOffsetY_B: number;
+            logoOffsetX: number;
+        };
+        authNavReturnImgView?: {
+            returnImgPath: string;
+            returnImgWidth: number;
+            returnImgHeight: number;
+            returnImgHidden: boolean;
+            returnImgOffsetX: number;
+        };
+        numberView?: {
+            numberColor: ColorValue;
+            numberSize: number;
+            numberOffsetY: number;
+            numberOffsetY_B: number;
+            numberOffsetX: number;
+        };
+        sloganView?: {
+            sloganColor: ColorValue;
+            sloganSize: number;
+            sloganOffsetY: number;
+            sloganOffsetY_B: number;
+            sloganOffsetX: number;
+        };
+        logBtnLayout?: {
+            logBtnImgPath: string;
+            logBtnUncheckedImgPath: string;
+            logBtnWidth: number;
+            logBtnHeight: number;
+            logBtnOffsetY: number;
+            logBtnOffsetY_B: number;
+            logBtnOffsetX: number;
+        };
+        switchView?: {
+            switchText: string;
+            switchColor: ColorValue;
+            switchSize: number;
+            switchHidden: boolean;
+            switchOffsetY: number;
+            switchOffsetY_B: number;
+            switchOffsetX: number;
+        };
+        privacyCheckBox?: {
+            unCheckedImgPath: string;
+            checkedImgPath: string;
+            privacyState: boolean;
+            privacyCheckBoxWidth: number;
+            privacyCheckBoxHeight: number;
+            privacyCheckBoxOffsetY: number;
+            privacyCheckBoxMarginRight: number;
+        };
+        privacyLayout?: {
+            privacyLayoutWidth: number;
+            privacyOffsetY: number;
+            privacyOffsetY_B: number;
+            privacyOffsetX: number;
+            isUseNormalWebActivity: boolean;
+        };
+        sloganViewTypeface?: string;
+        privacyClauseViewTypeface?: {
+            privacyClauseBaseTypeface: string;
+            privacyClauseTypeface: string;
+        };
+        customViews?: {
+            x: number;
+            y: number;
+            maxWidth: number;
+            maxHeight: number;
+            imageResourceName: string;
+            margin?:
+                | {
+                      left: number;
+                      top: number;
+                      right: number;
+                      bottom: number;
+                  }
+                | undefined;
+        }[];
+    },
+    callback: (response: {
+        app_id: string;
+        clienttype: string;
+        errorCode: string;
+        metadata: {
+            error_data: string;
+        };
+        model: string;
+        msg: string;
+        operator: string;
+        process_id: string;
+        release: string;
+        sdk: string;
+        status: number;
+    }) => void
+) {
     if (Platform.OS !== 'android') {
         return;
     }
@@ -237,7 +262,10 @@ export async function requestToken(oneLoginThemeConfig?: {
         return obj;
     }
     process(oneLoginThemeConfig);
-    return ExpoGeetestOneloginModule.requestToken(oneLoginThemeConfig);
+    return ExpoGeetestOneloginModule.requestToken(
+        oneLoginThemeConfig,
+        functionToCallbackId(callback)
+    );
 }
 
 type CGSize = { width: number; height: number };
@@ -962,6 +990,9 @@ export function requestTokenWithViewController(
 }
 
 function functionToCallbackId(callback: Function): number {
+    if (!callback) {
+        return -1;
+    }
     const newCallbackId = ++callbackId;
     callbackMap[newCallbackId] = callback;
     return newCallbackId;

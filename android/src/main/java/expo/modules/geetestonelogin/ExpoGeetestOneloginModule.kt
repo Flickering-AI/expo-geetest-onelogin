@@ -1,13 +1,26 @@
 package expo.modules.geetestonelogin
 
+import android.app.Activity
+import android.app.Dialog
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
+import android.widget.AbsoluteLayout
+import android.widget.CheckBox
 import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
+import android.widget.TextView
 import com.geetest.onelogin.OneLoginHelper
 import com.geetest.onelogin.config.AuthRegisterViewConfig
 import com.geetest.onelogin.config.OneLoginThemeConfig
 import com.geetest.onelogin.config.UserInterfaceStyle
 import com.geetest.onelogin.listener.AbstractOneLoginListener
+import com.geetest.onelogin.view.GTContainerWithLifecycle
+import com.geetest.onelogin.view.GTGifView
+import com.geetest.onelogin.view.GTVideoView
+import com.geetest.onelogin.view.LoadingImageView
 import expo.modules.kotlin.Promise
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
@@ -68,7 +81,7 @@ class ExpoGeetestOneloginModule : Module() {
         .with().isPreGetTokenResultValidate
     }
 
-    AsyncFunction("requestToken") { oneLoginThemeConfig: RNOneLoginThemeConfig?, promise: Promise ->
+    AsyncFunction("requestToken") { oneLoginThemeConfig: RNOneLoginThemeConfig?, callbackId: Int? ->
       val themeBuilder = OneLoginThemeConfig.Builder()
       if (oneLoginThemeConfig?.statusBar != null) {
         themeBuilder.setStatusBar(oneLoginThemeConfig.statusBar.statusBarColor, when (oneLoginThemeConfig.statusBar.statusBarStyle) {
@@ -213,11 +226,6 @@ class ExpoGeetestOneloginModule : Module() {
       if (oneLoginThemeConfig?.customViews != null) {
 
         val authRegisterViewConfigBuilder = AuthRegisterViewConfig.Builder()
-        val frameLayout = FrameLayout(appContext.reactContext!!)
-        frameLayout.layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT)
-//        frameLayout.setBackgroundColor(Color.RED)
-
-        oneLoginThemeConfig.customViews.map { frameLayout.addView(it.build(appContext.reactContext!!)) }
         authRegisterViewConfigBuilder.setView(oneLoginThemeConfig.customViews[0].build(appContext.reactContext!!))
         authRegisterViewConfigBuilder.setRootViewId(AuthRegisterViewConfig.RootViewId.ROOT_VIEW_ID_BODY)
         OneLoginHelper.with().addOneLoginRegisterViewConfig("custom_views", authRegisterViewConfigBuilder.build())
@@ -225,7 +233,9 @@ class ExpoGeetestOneloginModule : Module() {
       OneLoginHelper
         .with().requestToken(themeBuilder.build(), object : AbstractOneLoginListener() {
           override fun onResult(p0: JSONObject?) {
-            promise.resolve(p0?.toMap())
+            if (callbackId != null) {
+              p0?.toMap()?.let { callback(callbackId, it) }
+            }
           }
         })
     }
@@ -251,4 +261,11 @@ class ExpoGeetestOneloginModule : Module() {
 
   private val context
     get() = requireNotNull(appContext.reactContext)
+
+  fun callback(callbackId: Int) {
+    callback(callbackId, null)
+  }
+  fun callback(callbackId: Int, params: Any?) {
+    sendEvent("onChange", mapOf("callbackId" to callbackId, "type" to "callback", "result" to params))
+  }
 }

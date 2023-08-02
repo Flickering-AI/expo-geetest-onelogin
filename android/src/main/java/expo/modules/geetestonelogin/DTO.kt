@@ -3,6 +3,7 @@ package expo.modules.geetestonelogin
 import android.content.Context
 import android.graphics.Color
 import android.widget.ImageView
+import android.widget.RelativeLayout
 import androidx.annotation.ColorInt
 import expo.modules.kotlin.records.Field
 import expo.modules.kotlin.records.Record
@@ -277,7 +278,16 @@ class RNOneLoginThemeConfigPrivacyClauseViewTypeface: Record {
   @Field
   val privacyClauseTypeface: String = ""
 }
-
+class RNMargin: Record {
+  @Field
+  val left: Int = 0
+  @Field
+  val top: Int = 0
+  @Field
+  val right: Int = 0
+  @Field
+  val bottom: Int = 0
+}
 class RNImageView: Record {
   @Field
   val x: Float = 0f
@@ -289,6 +299,8 @@ class RNImageView: Record {
   val maxHeight: Int = 0
   @Field
   val imageResourceName: String = ""
+  @Field
+  val margin: RNMargin? = null
   fun build(context: Context): ImageView {
     val imageView = ImageView(context)
     imageView.maxWidth = maxWidth
@@ -296,6 +308,12 @@ class RNImageView: Record {
     imageView.x = x
     imageView.y = y
     imageView.setImageResource(context.resources.getIdentifier(imageResourceName, "drawable", context.packageName))
+    val layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
+    layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE)
+    if (margin != null) {
+      layoutParams.setMargins(margin.left, margin.bottom, margin.right, margin.bottom);
+    }
+    imageView.layoutParams = layoutParams
     return imageView
   }
 }
