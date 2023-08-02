@@ -91,7 +91,7 @@ export type IOSOneLoginResponse = {
 export type AndroidOneLoginUIConfig = {
     statusBar?: {
         statusBarColor: ColorValue;
-        navigationBarStyle:
+        statusBarStyle:
             | 'UserInterfaceStyle.UNSPECIFIED'
             | 'UserInterfaceStyle.LIGHT'
             | 'UserInterfaceStyle.DARK';

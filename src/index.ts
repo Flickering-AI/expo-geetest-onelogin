@@ -1,5 +1,10 @@
 import { Platform, processColor } from 'react-native';
-import { NativeModulesProxy, EventEmitter, Subscription } from 'expo-modules-core';
+import {
+    NativeModulesProxy,
+    EventEmitter,
+    Subscription,
+    requireNativeModule,
+} from 'expo-modules-core';
 
 // Import the native module. On web, it will be resolved to ExpoGeetestOnelogin.web.ts
 // and on native platforms to ExpoGeetestOnelogin.ts
@@ -14,13 +19,6 @@ import {
     IOSOneLoginUIConfig,
 } from './ExpoGeetestOnelogin.types';
 
-// Get the native constant value.
-export const PI = ExpoGeetestOneloginModule.PI;
-
-export async function setValueAsync(value: string) {
-    return await ExpoGeetestOneloginModule.setValueAsync(value);
-}
-
 const emitter = new EventEmitter(
     ExpoGeetestOneloginModule ?? NativeModulesProxy.ExpoGeetestOnelogin
 );
@@ -31,7 +29,7 @@ let callbackMap = {};
 export function addChangeListener<T>(
     listener: (event: ChangeEventPayload<T>) => void
 ): Subscription {
-    return emitter.addListener<ChangeEventPayload<T>>('onChange', listener);
+    return emitter.addListener('onChange', listener);
 }
 
 export { ExpoGeetestOneloginView, ExpoGeetestOneloginViewProps, ChangeEventPayload };
@@ -171,4 +169,15 @@ export function setRequestTimeout(
 
 export function stopLoading() {
     return ExpoGeetestOneloginModule.stopLoading();
+}
+
+/**
+ * ios: 为保证用户在退出登录之后，能快速拉起授权页面，请在用户退出登录时，调用此方法
+ * android: 登录成功后 SDK 内部不再维护预取号的有效性，如果用户退出登录后，为了方便下次重新登录能快速拉起授权页，也可以重新调用register进行预取号。
+ */
+export function renewPreGetToken(appId: string) {
+    if (Platform.OS === 'android') {
+        ExpoGeetestOneloginModule.register(appId);
+    }
+    ExpoGeetestOneloginModule.renewPreGetToken();
 }
