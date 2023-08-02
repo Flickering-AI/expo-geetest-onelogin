@@ -1,0 +1,67 @@
+{
+  "name": "expo-geetest-onelogin",
+  "version": "0.1.0",
+  "description": "react native plugin for https://docs.geetest.com/onelogin/overview/prodes",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "scripts": {
+    "build": "expo-module build",
+    "clean": "expo-module clean",
+    "lint": "expo-module lint",
+    "test": "expo-module test",
+    "prepare": "expo-module prepare",
+    "prepublishOnly": "expo-module prepublishOnly",
+    "expo-module": "expo-module",
+    "open:ios": "open -a \"Xcode\" example/ios",
+    "open:android": "open -a \"Android Studio\" example/android",
+    "release": "release-it"
+  },
+  "keywords": [
+    "react-native",
+    "expo",
+    "expo-geetest-onelogin",
+    "ExpoGeetestOnelogin"
+  ],
+  "repository": "https://github.com/Flickering-AI/expo-geetest-onelogin",
+  "bugs": {
+    "url": "https://github.com/Flickering-AI/expo-geetest-onelogin/issues"
+  },
+  "author": "Xuanping <a845326948@gmail.com> (https://github.com/lxp-git)",
+  "license": "MIT",
+  "homepage": "https://github.com/Flickering-AI/expo-geetest-onelogin#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "@release-it/conventional-changelog": "^7.0.0",
+    "@types/react": "^18.0.25",
+    "@types/react-native": "^0.72.2",
+    "expo-module-scripts": "^3.0.11",
+    "expo-modules-core": "^1.5.6",
+    "release-it": "^16.1.3"
+  },
+  "peerDependencies": {
+    "expo": "*",
+    "react": "*",
+    "react-native": "*"
+  },
+  "release-it": {
+    "git": {
+      "commitMessage": "chore: release ${version}",
+      "tagName": "v${version}",
+      "requireCleanWorkingDir": false,
+      "addFiles": [
+        "package.json"
+      ]
+    },
+    "npm": {
+      "publish": true
+    },
+    "github": {
+      "release": true
+    },
+    "plugins": {
+      "@release-it/conventional-changelog": {
+        "preset": "angular"
+      }
+    }
+  }
+}
