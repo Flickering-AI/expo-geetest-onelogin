@@ -1,8 +1,8 @@
 package expo.modules.geetestonelogin
 
+import android.app.Activity
+import android.app.ProgressDialog
 import android.graphics.Typeface
-import android.util.Log
-import androidx.core.os.bundleOf
 import com.geetest.onelogin.OneLoginHelper
 import com.geetest.onelogin.config.AuthRegisterViewConfig
 import com.geetest.onelogin.config.OneLoginThemeConfig
@@ -11,6 +11,8 @@ import com.geetest.onelogin.listener.AbstractOneLoginListener
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
 import org.json.JSONObject
+import java.lang.ref.WeakReference
+
 
 const val EVENT_NAME = "onChange"
 
@@ -66,6 +68,11 @@ class ExpoGeetestOneloginModule : Module() {
     Function("isPreGetTokenResultValidate") {
       return@Function OneLoginHelper
         .with().isPreGetTokenResultValidate
+    }
+
+    Function("stopLoading") {
+      OneLoginHelper
+        .with().stopLoading()
     }
 
     AsyncFunction("requestToken") { oneLoginThemeConfig: RNOneLoginThemeConfig?, callbackId: Int? ->
@@ -219,10 +226,20 @@ class ExpoGeetestOneloginModule : Module() {
       }
       OneLoginHelper
         .with().requestToken(themeBuilder.build(), object : AbstractOneLoginListener() {
+          private var authActivityWeakReference: WeakReference<Activity>? = null
+          private var loadingDialog: ProgressDialog? = null
           override fun onResult(p0: JSONObject?) {
             if (callbackId != null) {
               p0?.toMap()?.let { callback(callbackId, it) }
             }
+          }
+          override fun onLoginLoading() {
+            super.onLoginLoading()
+            loadingDialog = ProgressDialog.show(authActivityWeakReference!!.get(), "", "请稍候...")
+          }
+          override fun onAuthActivityCreate(activity: Activity?) {
+            super.onAuthActivityCreate(activity)
+            authActivityWeakReference = WeakReference(activity)
           }
         })
     }
