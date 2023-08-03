@@ -75,6 +75,11 @@ class ExpoGeetestOneloginModule : Module() {
         .with().stopLoading()
     }
 
+    Function("dismissAuthActivity") {
+      OneLoginHelper
+        .with().dismissAuthActivity()
+    }
+
     AsyncFunction("requestToken") { oneLoginThemeConfig: RNOneLoginThemeConfig?, callbackId: Int? ->
       val themeBuilder = OneLoginThemeConfig.Builder()
       if (oneLoginThemeConfig?.statusBar != null) {
