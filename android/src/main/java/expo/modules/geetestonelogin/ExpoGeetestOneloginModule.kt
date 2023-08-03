@@ -1,31 +1,18 @@
 package expo.modules.geetestonelogin
 
-import android.app.Activity
-import android.app.Dialog
-import android.content.Intent
-import android.graphics.Color
 import android.graphics.Typeface
-import android.widget.AbsoluteLayout
-import android.widget.CheckBox
-import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.util.Log
+import androidx.core.os.bundleOf
 import com.geetest.onelogin.OneLoginHelper
 import com.geetest.onelogin.config.AuthRegisterViewConfig
 import com.geetest.onelogin.config.OneLoginThemeConfig
 import com.geetest.onelogin.config.UserInterfaceStyle
 import com.geetest.onelogin.listener.AbstractOneLoginListener
-import com.geetest.onelogin.view.GTContainerWithLifecycle
-import com.geetest.onelogin.view.GTGifView
-import com.geetest.onelogin.view.GTVideoView
-import com.geetest.onelogin.view.LoadingImageView
-import expo.modules.kotlin.Promise
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
 import org.json.JSONObject
 
+const val EVENT_NAME = "onChange"
 
 class ExpoGeetestOneloginModule : Module() {
   // Each module class must implement the definition function. The definition consists of components
@@ -43,7 +30,7 @@ class ExpoGeetestOneloginModule : Module() {
     )
 
     // Defines event names that the module can send to JavaScript.
-    Events("onChange")
+    Events(EVENT_NAME)
 
     Function("setLogEnable") { isLogEnable: Boolean ->
       OneLoginHelper
@@ -239,33 +226,15 @@ class ExpoGeetestOneloginModule : Module() {
           }
         })
     }
-
-    // Defines a JavaScript function that always returns a Promise and whose native code
-    // is by default dispatched on the different thread than the JavaScript runtime runs on.
-    AsyncFunction("setValueAsync") { value: String ->
-      // Send an event to JavaScript.
-      sendEvent("onChange", mapOf(
-        "value" to value
-      ))
-    }
-
-    // Enables the module to be used as a native view. Definition components that are accepted as part of
-    // the view definition: Prop, Events.
-    View(ExpoGeetestOneloginView::class) {
-      // Defines a setter for the `name` prop.
-      Prop("name") { view: ExpoGeetestOneloginView, prop: String ->
-        println(prop)
-      }
-    }
   }
 
   private val context
     get() = requireNotNull(appContext.reactContext)
 
   fun callback(callbackId: Int) {
-    callback(callbackId, null)
+    this.callback(callbackId, null)
   }
   fun callback(callbackId: Int, params: Any?) {
-    sendEvent("onChange", mapOf("callbackId" to callbackId, "type" to "callback", "result" to params))
+    sendEvent(EVENT_NAME, mapOf("callbackId" to callbackId, "type" to "callback", "result" to params))
   }
 }
