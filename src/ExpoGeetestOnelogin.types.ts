@@ -102,6 +102,14 @@ export type AndroidOneLoginUIConfig = {
       | "UserInterfaceStyle.DARK";
     bgLayoutInStatusBar: boolean;
   };
+  navigationBar?: {
+    navigationBarColor: ColorValue;
+    navigationBarStyle:
+      | "UserInterfaceStyle.UNSPECIFIED"
+      | "UserInterfaceStyle.LIGHT"
+      | "UserInterfaceStyle.DARK";
+    bgLayoutInNavigationBar: boolean;
+  };
   authBGImgPath?: string;
   dialogTheme?: {
     isDialogTheme: boolean;

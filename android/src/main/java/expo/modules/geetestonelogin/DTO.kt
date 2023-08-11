@@ -32,6 +32,15 @@ class RNOneLoginThemeConfigStatusBar : Record {
   val bgLayoutInStatusBar: Boolean = false
 }
 
+class RNOneLoginThemeConfigNavigationBar : Record {
+  @Field @ColorInt
+  val navigationBarColor: Int = 0
+  @Field
+  val navigationBarStyle: String = "UserInterfaceStyle.UNSPECIFIED"
+  @Field
+  val bgLayoutInNavigationBar: Boolean = false
+}
+
 class RNOneLoginThemeConfigDialogTheme : Record {
   @Field
   val isDialogTheme: Boolean = false
@@ -321,6 +330,8 @@ class RNImageView: Record {
 class RNOneLoginThemeConfig : Record {
   @Field
   val statusBar: RNOneLoginThemeConfigStatusBar? = null
+  @Field
+  val navigationBar: RNOneLoginThemeConfigNavigationBar? = null
   @Field
   val authBGImgPath: String? = null
   @Field

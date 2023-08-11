@@ -89,6 +89,13 @@ class ExpoGeetestOneloginModule : Module() {
           else -> UserInterfaceStyle.UNSPECIFIED
         }, oneLoginThemeConfig.statusBar.bgLayoutInStatusBar)
       }
+      if (oneLoginThemeConfig?.navigationBar != null) {
+        themeBuilder.setNavigationBar(oneLoginThemeConfig.navigationBar.navigationBarColor, when (oneLoginThemeConfig.navigationBar.navigationBarStyle) {
+          "UserInterfaceStyle.LIGHT" -> UserInterfaceStyle.LIGHT
+          "UserInterfaceStyle.DARK" -> UserInterfaceStyle.DARK
+          else -> UserInterfaceStyle.UNSPECIFIED
+        }, oneLoginThemeConfig.navigationBar.bgLayoutInNavigationBar)
+      }
       if (oneLoginThemeConfig?.authBGImgPath != null) {
         themeBuilder.setAuthBGImgPath(oneLoginThemeConfig.authBGImgPath)
       }
