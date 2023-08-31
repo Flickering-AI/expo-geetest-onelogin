@@ -95,6 +95,11 @@ export async function requestToken(
           obj[key] = colorInt || obj[key];
         }
       }
+      if (typeof obj[key] === "function") {
+        obj[key] = {
+            callbackId: functionToCallbackId(obj[key]),
+        }
+      }
     });
     return obj;
   }

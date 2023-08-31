@@ -3,11 +3,26 @@ package expo.modules.geetestonelogin
 import android.app.Activity
 import android.app.ProgressDialog
 import android.graphics.Typeface
+import android.util.Log
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.CheckBox
+import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
+import android.widget.TextView
+import androidx.core.view.children
 import com.geetest.onelogin.OneLoginHelper
 import com.geetest.onelogin.config.AuthRegisterViewConfig
 import com.geetest.onelogin.config.OneLoginThemeConfig
 import com.geetest.onelogin.config.UserInterfaceStyle
 import com.geetest.onelogin.listener.AbstractOneLoginListener
+import com.geetest.onelogin.view.GTContainerWithLifecycle
+import com.geetest.onelogin.view.GTGifView
+import com.geetest.onelogin.view.GTVideoView
+import com.geetest.onelogin.view.LoadingImageView
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
 import org.json.JSONObject
@@ -232,7 +247,13 @@ class ExpoGeetestOneloginModule : Module() {
       if (oneLoginThemeConfig?.customViews != null) {
 
         val authRegisterViewConfigBuilder = AuthRegisterViewConfig.Builder()
-        authRegisterViewConfigBuilder.setView(oneLoginThemeConfig.customViews[0].build(appContext.reactContext!!))
+        val frameLayout = FrameLayout(context)
+        frameLayout.isClickable = false
+        frameLayout.isFocusable = false
+        frameLayout.tag = "customViews"
+        frameLayout.layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT)
+        oneLoginThemeConfig.customViews.forEach { frameLayout.addView(it.build(appContext.reactContext!!, onClickFun = { a, b -> callback(a, b) })) }
+        authRegisterViewConfigBuilder.setView(frameLayout)
         authRegisterViewConfigBuilder.setRootViewId(AuthRegisterViewConfig.RootViewId.ROOT_VIEW_ID_BODY)
         OneLoginHelper.with().addOneLoginRegisterViewConfig("custom_views", authRegisterViewConfigBuilder.build())
       }
@@ -252,6 +273,22 @@ class ExpoGeetestOneloginModule : Module() {
           override fun onAuthActivityCreate(activity: Activity?) {
             super.onAuthActivityCreate(activity)
             authActivityWeakReference = WeakReference(activity)
+            val view = activity!!.window.decorView
+            val contentView = view.findViewById<View>(android.R.id.content)
+            checkTag((contentView as FrameLayout).children)
+          }
+
+          fun checkTag(views: Sequence<View>?) {
+            views?.forEach {
+              if (it.tag == "customViews") {
+                it.isClickable = false
+                it.isFocusable = false
+                (it.parent as View).isClickable = false
+                (it.parent as View).isFocusable = false
+              } else if (it is ViewGroup) {
+                checkTag(it.children)
+              }
+            }
           }
         })
     }
@@ -263,7 +300,7 @@ class ExpoGeetestOneloginModule : Module() {
   fun callback(callbackId: Int) {
     this.callback(callbackId, null)
   }
-  fun callback(callbackId: Int, params: Any?) {
+  fun callback(callbackId: Int, params: Map<String, Any?>?) {
     sendEvent(EVENT_NAME, mapOf("callbackId" to callbackId, "type" to "callback", "result" to params))
   }
 }

@@ -93,6 +93,27 @@ export type IOSOneLoginResponse = {
   token: string;
 };
 
+export type CustomView = {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    imageResourceName?: string;
+    text?: string,
+    textSize?: number,
+    color?: ColorValue,
+    typeface?: string,
+    onClick?: () => void,
+    margin?:
+      | {
+          left: number;
+          top: number;
+          right: number;
+          bottom: number;
+        }
+      | undefined;
+  }
+
 export type AndroidOneLoginUIConfig = {
   statusBar?: {
     statusBarColor: ColorValue;
@@ -248,21 +269,7 @@ export type AndroidOneLoginUIConfig = {
     privacyClauseBaseTypeface: string;
     privacyClauseTypeface: string;
   };
-  customViews?: {
-    x: number;
-    y: number;
-    maxWidth: number;
-    maxHeight: number;
-    imageResourceName: string;
-    margin?:
-      | {
-          left: number;
-          top: number;
-          right: number;
-          bottom: number;
-        }
-      | undefined;
-  }[];
+  customViews?: CustomView[];
 };
 
 export type IOSOneLoginUIConfig = {

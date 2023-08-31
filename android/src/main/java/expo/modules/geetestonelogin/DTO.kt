@@ -2,9 +2,14 @@ package expo.modules.geetestonelogin
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.Typeface
+import android.view.View
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.annotation.ColorInt
+import androidx.annotation.Nullable
 import expo.modules.kotlin.records.Field
 import expo.modules.kotlin.records.Record
 import org.json.JSONArray
@@ -297,33 +302,65 @@ class RNMargin: Record {
   @Field
   val bottom: Int = 0
 }
-class RNImageView: Record {
+class RNFunction: Record {
+  @Field
+  val callbackId: Int = 0
+  @Field
+  val params: Map<String, Any> = mapOf()
+}
+class RNCustomView: Record {
   @Field
   val x: Float = 0f
   @Field
   val y: Float = 0f
   @Field
-  val maxWidth: Int = 0
+  val width: Int = 0
   @Field
-  val maxHeight: Int = 0
+  val height: Int = 0
   @Field
   val imageResourceName: String = ""
   @Field
+  val text: String = ""
+  @Field @ColorInt
+  val color: Int = 0
+  @Field
+  val textSize: Float = 16f
+  @Field
+  val typeface: String = ""
+  @Field
   val margin: RNMargin? = null
-  fun build(context: Context): ImageView {
-    val imageView = ImageView(context)
-    imageView.maxWidth = maxWidth
-    imageView.maxHeight = maxHeight
-    imageView.x = x
-    imageView.y = y
-    imageView.setImageResource(context.resources.getIdentifier(imageResourceName, "drawable", context.packageName))
-    val layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
-    layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE)
-    if (margin != null) {
-      layoutParams.setMargins(margin.left, margin.bottom, margin.right, margin.bottom);
+  @Field
+  val onClick: RNFunction? = null
+  fun build(context: Context, onClickFun: (Int, Map<String, Any?>?) -> Unit): View {
+    val view: View?
+    if (text.isNotEmpty()) {
+      view = TextView(context)
+      view.text = text
+      view.setTextColor(color)
+      if (typeface.isNotEmpty()) {
+        view.typeface = Typeface.createFromAsset(context.assets, typeface)
+      }
+      view.textSize = textSize
+    } else {
+      view = ImageView(context)
+      view.setImageResource(context.resources.getIdentifier(imageResourceName, "drawable", context.packageName))
     }
-    imageView.layoutParams = layoutParams
-    return imageView
+    if (width != 0 && height != 0) {
+      view.layoutParams = FrameLayout.LayoutParams(width, height)
+    }
+
+    view.x = x
+    view.y = y
+    if (margin != null) {
+      if (view.layoutParams == null) {
+        view.layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT)
+        (view.layoutParams as FrameLayout.LayoutParams).setMargins(margin.left, margin.bottom, margin.right, margin.bottom)
+      }
+    }
+    if (onClick != null) {
+      view.setOnClickListener { onClickFun(onClick.callbackId, mapOf()) }
+    }
+    return view
   }
 }
 
@@ -385,5 +422,5 @@ class RNOneLoginThemeConfig : Record {
   @Field
   val sloganViewTypeface: String? = null
   @Field
-  val customViews: Array<RNImageView>? = null
+  val customViews: Array<RNCustomView>? = null
 }
