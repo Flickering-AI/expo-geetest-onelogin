@@ -804,12 +804,12 @@ struct RNOLAuthViewModel: Record {
     /**
      弹窗关闭按钮距弹窗顶部偏移。
      */
-    @Field var closePopupTopOffset: NSNumber = 0;
+    @Field var closePopupTopOffset: Int = 0;
 
     /**
      弹窗关闭按钮距弹窗右边偏移。
      */
-    @Field var closePopupRightOffset: NSNumber = 0
+    @Field var closePopupRightOffset: Int = 0
 
     /**
     是否需要通过点击弹窗的背景区域以关闭授权页面。
