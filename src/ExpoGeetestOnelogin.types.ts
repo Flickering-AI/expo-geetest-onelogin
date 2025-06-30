@@ -94,25 +94,25 @@ export type IOSOneLoginResponse = {
 };
 
 export type CustomView = {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-    imageResourceName?: string;
-    text?: string,
-    textSize?: number,
-    color?: ColorValue,
-    typeface?: string,
-    onClick?: () => void,
-    margin?:
-      | {
-          left: number;
-          top: number;
-          right: number;
-          bottom: number;
-        }
-      | undefined;
-  }
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  imageResourceName?: string;
+  text?: string;
+  textSize?: number;
+  color?: ColorValue;
+  typeface?: string;
+  onClick?: () => void;
+  margin?:
+    | {
+        left: number;
+        top: number;
+        right: number;
+        bottom: number;
+      }
+    | undefined;
+};
 
 export type AndroidOneLoginUIConfig = {
   statusBar?: {
@@ -123,6 +123,7 @@ export type AndroidOneLoginUIConfig = {
       | "UserInterfaceStyle.DARK";
     bgLayoutInStatusBar: boolean;
   };
+  authBgVideoUri?: string;
   navigationBar?: {
     navigationBarColor: ColorValue;
     navigationBarStyle:
@@ -589,7 +590,7 @@ export type IOSOneLoginUIConfig = {
   backgroundGifPath?: String;
   // Background Video/授权页面背景视频
   /**
-  授权页面背景视频路径，可支持本地和网络视频，与背景图片、gif，三者只有一个有效，视频优先级最高，背景图其次，gif 最后
+  授权页面背景视频路径，可支持本地(file://开头的路径)和网络视频，与背景图片、gif，三者只有一个有效，视频优先级最高，背景图其次，gif 最后
   */
   backgroundVideoPath?: String;
 

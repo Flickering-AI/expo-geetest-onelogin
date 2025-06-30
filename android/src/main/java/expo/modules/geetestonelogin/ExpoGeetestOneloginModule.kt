@@ -104,6 +104,9 @@ class ExpoGeetestOneloginModule : Module() {
           else -> UserInterfaceStyle.UNSPECIFIED
         }, oneLoginThemeConfig.statusBar.bgLayoutInStatusBar)
       }
+      if (oneLoginThemeConfig?.authBgVideoUri != null) {
+        themeBuilder.setAuthBgVideoUri("android.resource://${context.packageName}/" + appContext.currentActivity!!.resources.getIdentifier(oneLoginThemeConfig.authBgVideoUri, "raw", context.packageName))
+      }
       if (oneLoginThemeConfig?.navigationBar != null) {
         themeBuilder.setNavigationBar(oneLoginThemeConfig.navigationBar.navigationBarColor, when (oneLoginThemeConfig.navigationBar.navigationBarStyle) {
           "UserInterfaceStyle.LIGHT" -> UserInterfaceStyle.LIGHT
@@ -258,7 +261,7 @@ class ExpoGeetestOneloginModule : Module() {
         OneLoginHelper.with().addOneLoginRegisterViewConfig("custom_views", authRegisterViewConfigBuilder.build())
       }
       OneLoginHelper
-        .with().requestToken(themeBuilder.build(), object : AbstractOneLoginListener() {
+        .with().requestToken(appContext.currentActivity, themeBuilder.build(), object : AbstractOneLoginListener() {
           private var authActivityWeakReference: WeakReference<Activity>? = null
           private var loadingDialog: ProgressDialog? = null
           override fun onResult(p0: JSONObject?) {

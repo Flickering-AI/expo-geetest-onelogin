@@ -372,6 +372,8 @@ class RNOneLoginThemeConfig : Record {
   @Field
   val authBGImgPath: String? = null
   @Field
+  val authBgVideoUri: String? = null
+  @Field
   val dialogTheme: RNOneLoginThemeConfigDialogTheme? = null
   @Field
   val authNavLayout: RNOneLoginThemeConfigAuthNavLayout? = null

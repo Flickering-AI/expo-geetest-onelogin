@@ -70,6 +70,9 @@ public class ExpoGeetestOneloginModule: Module {
               viewModel.statusBarStyle = UIStatusBarStyle.default
           }
         }
+          if (viewModelRN.backgroundVideoPath != nil) {
+              viewModel.backgroundVideoPath = viewModelRN.backgroundVideoPath;
+          }
         if (viewModelRN.navTextMargin != nil) {
           viewModel.navTextMargin = viewModelRN.navTextMargin!
         }
@@ -299,16 +302,6 @@ public class ExpoGeetestOneloginModule: Module {
                 }
             }
         }
-  //      if ((oneLoginThemeConfig.statusBar) != nil) {
-  //        switch oneLoginThemeConfig.statusBar?.statusBarStyle {
-  //          case "UserInterfaceStyle.LIGHT":
-  //            viewModel.statusBarStyle = UIStatusBarStyle.lightContent
-  //          case "UserInterfaceStyle.DARK":
-  //            viewModel.statusBarStyle = UIStatusBarStyle.darkContent
-  //          default:
-  //            viewModel.statusBarStyle = UIStatusBarStyle.default
-  //        }
-  //      }
         
         if (controller != nil) {
           OneLoginPro.requestToken(with: controller!, viewModel: viewModel, completion: { result in

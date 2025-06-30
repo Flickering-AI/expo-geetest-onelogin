@@ -734,7 +734,7 @@ struct RNOLAuthViewModel: Record {
     /**
      横屏模式授权页面背景图片
      */
-    @Field var landscapeBackgroundImage: String;
+    @Field var landscapeBackgroundImage: String?;
 
     // Background Gif/授权页面背景 gif
     /**
@@ -745,7 +745,7 @@ struct RNOLAuthViewModel: Record {
     /**
      授权页面背景视频路径，可支持本地和网络视频，与背景图片、gif，三者只有一个有效，视频优先级最高，背景图其次，gif 最后
      */
-    @Field var backgroundVideoPath: String;
+    @Field var backgroundVideoPath: String?;
 
     // Autolayout
 
@@ -804,12 +804,12 @@ struct RNOLAuthViewModel: Record {
     /**
      弹窗关闭按钮距弹窗顶部偏移。
      */
-    @Field var closePopupTopOffset: Int = 0;
+    @Field var closePopupTopOffset: NSNumber = 0;
 
     /**
      弹窗关闭按钮距弹窗右边偏移。
      */
-    @Field var closePopupRightOffset: Int = 0
+    @Field var closePopupRightOffset: NSNumber = 0
 
     /**
     是否需要通过点击弹窗的背景区域以关闭授权页面。
