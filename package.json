@@ -1,6 +1,6 @@
 {
   "name": "expo-geetest-onelogin",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "description": "react native plugin for https://docs.geetest.com/onelogin/overview/prodes",
   "main": "build/index.js",
   "types": "build/index.d.ts",
