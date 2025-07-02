@@ -97,8 +97,8 @@ export async function requestToken(
       }
       if (typeof obj[key] === "function") {
         obj[key] = {
-            callbackId: functionToCallbackId(obj[key]),
-        }
+          callbackId: functionToCallbackId(obj[key]),
+        };
       }
     });
     return obj;
@@ -152,9 +152,9 @@ function functionToCallbackId(callback: Function): number {
 }
 
 addChangeListener((data) => {
-    if (data.type === 'callback') {
+  if (data.type === "callback") {
     if (callbackMap[data.callbackId!]?.(data?.result)) {
-      delete callbackMap[data.callbackId!];
+      // delete callbackMap[data.callbackId!];
     }
   }
 });
