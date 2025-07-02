@@ -51,11 +51,20 @@ public class ExpoGeetestOneloginModule: Module {
       DispatchQueue.main.async {
         // Find the nearest view controller
         var controller = UIApplication.shared.windows.filter {$0.isKeyWindow}.first?.rootViewController;
+        var reactViewController = controller?.view.reactViewController();
+        var presentingViewController = controller?.presentingViewController;
         var presentedController = controller?.presentedViewController;
-        while (presentedController != nil && !presentedController!.isBeingDismissed) {
-          controller = presentedController;
-          presentedController = controller?.presentedViewController;
+        if (presentedController != nil) {
+            while (presentedController != nil && !presentedController!.isBeingDismissed) {
+              controller = presentedController;
+              presentedController = controller?.presentedViewController;
+            }
+        } else {
+            while let child = controller?.children.last {
+                controller = child
+            }
         }
+        
         
         let viewModel = OLAuthViewModel()
         if (viewModelRN.statusBarStyle != nil) {
@@ -72,6 +81,9 @@ public class ExpoGeetestOneloginModule: Module {
         }
           if (viewModelRN.backgroundVideoPath != nil) {
               viewModel.backgroundVideoPath = viewModelRN.backgroundVideoPath;
+          }
+          if (viewModelRN.pullAuthVCStyle == "push") {
+              viewModel.pullAuthVCStyle = OLPullAuthVCStyle.push
           }
         if (viewModelRN.navTextMargin != nil) {
           viewModel.navTextMargin = viewModelRN.navTextMargin!
@@ -246,6 +258,9 @@ public class ExpoGeetestOneloginModule: Module {
             
           }
         }
+          if (viewModelRN.switchButtonHidden != nil) {
+              viewModel.switchButtonHidden = viewModelRN.switchButtonHidden!
+          }
         if (viewModelRN.clickSwitchButtonBlock != nil) {
           viewModel.clickSwitchButtonBlock = {
             self.callback(callbackId: viewModelRN.clickSwitchButtonBlock!.callbackId, params: nil)
@@ -304,9 +319,11 @@ public class ExpoGeetestOneloginModule: Module {
         }
         
         if (controller != nil) {
-          OneLoginPro.requestToken(with: controller!, viewModel: viewModel, completion: { result in
-            self.callback(callbackId: callbackId, params: ["result": result])
-          })
+          OneLoginPro.requestToken(with: controller!, viewModel: viewModel){ [weak self] result in
+              if let strongSelf = self {
+                  strongSelf.callback(callbackId: callbackId, params: ["result": result])
+              }
+          }
         }
       }
     }
@@ -335,9 +352,6 @@ public class ExpoGeetestOneloginModule: Module {
   
   @objc func onClicked(sender: UIButton) {
     self.callback(callbackId: sender.tag, params: ["type": "callback"])
-  }
-  func callback(callbackId: Int) {
-    self.callback(callbackId: callbackId, params: nil)
   }
   func callback(callbackId: Int, params: Dictionary<String, Any>?) {
     self.sendEvent("onChange", ["callbackId": callbackId, "type": "callback"].merging(params ?? [:], uniquingKeysWith: { (_, new) in new }))

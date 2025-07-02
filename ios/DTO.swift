@@ -373,6 +373,10 @@ struct RNUIButton: Record {
     @Field var callbackId: Int?
     func build() -> UIButton {
         let button = UIButton.init(frame: frame!)
+      button.imageView?.contentMode = .scaleToFill
+      button.contentMode = .scaleToFill
+      button.contentHorizontalAlignment = .fill
+      button.contentVerticalAlignment = .fill
         button.setImage(uiImage?.build(), for: UIControl.State.normal)
         button.adjustsImageWhenHighlighted = false
         if (callbackId != nil) {
@@ -542,7 +546,7 @@ struct RNOLAuthViewModel: Record {
     /**
      隐藏切换账号按钮。默认不隐藏。
      */
-    @Field var switchButtonHidden: Bool;
+    @Field var switchButtonHidden: Bool?;
 
     /**
      * 点击授权页面切换账号按钮的回调
