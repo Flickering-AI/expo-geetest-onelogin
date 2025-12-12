@@ -330,6 +330,8 @@ class RNCustomView: Record {
   @Field
   val margin: RNMargin? = null
   @Field
+  val padding: RNMargin? = null
+  @Field
   val onClick: RNFunction? = null
   fun build(context: Context, onClickFun: (Int, Map<String, Any?>?) -> Unit): View {
     val view: View?
@@ -351,12 +353,16 @@ class RNCustomView: Record {
 
     view.x = x
     view.y = y
-    if (margin != null) {
-      if (view.layoutParams == null) {
-        view.layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT)
-        (view.layoutParams as FrameLayout.LayoutParams).setMargins(margin.left, margin.bottom, margin.right, margin.bottom)
-      }
+    if (view.layoutParams == null) {
+      view.layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT)
     }
+    if (margin != null) {
+      (view.layoutParams as FrameLayout.LayoutParams).setMargins(margin.left, margin.top, margin.right, margin.bottom)
+    }
+    if (padding != null) {
+      view.setPadding(padding.left, padding.top, padding.right, padding.bottom)
+    }
+
     if (onClick != null) {
       view.setOnClickListener { onClickFun(onClick.callbackId, mapOf()) }
     }

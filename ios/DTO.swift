@@ -367,9 +367,41 @@ struct RNUIImageView: Record {
         return imageView
     }
 }
+
+extension UIButton {
+    
+    /// 统一设置内边距（自动兼容 iOS 15+ Configuration 和老版本）
+    func setPadding(_ padding: CGFloat) {
+        setPadding(top: padding, left: padding, bottom: padding, right: padding)
+    }
+    
+    /// 统一设置不同方向的内边距
+    func setPadding(top: CGFloat, left: CGFloat, bottom: CGFloat, right: CGFloat) {
+        if #available(iOS 15.0, *) {
+            // iOS 15+ 使用 Configuration
+            // 注意：如果按钮本来没有 config，我们需要初始化一个
+            // 这里假设我们保留原有的 style，或者默认为 plain
+            var config = self.configuration ?? .plain()
+            config.contentInsets = NSDirectionalEdgeInsets(top: top, leading: left, bottom: bottom, trailing: right)
+            self.configuration = config
+        } else {
+            // iOS 14 及以下使用 contentEdgeInsets
+            self.contentEdgeInsets = UIEdgeInsets(top: top, left: left, bottom: bottom, right: right)
+        }
+    }
+}
+
+struct RNUIEdgeInsets: Record {
+  @Field var top: CGFloat = 0
+  @Field var right: CGFloat = 0
+  @Field var bottom: CGFloat = 0
+  @Field var left: CGFloat = 0
+}
+
 struct RNUIButton: Record {
     @Field var frame: CGRect?
     @Field var uiImage: RNUImage?
+    @Field var padding: RNUIEdgeInsets?
     @Field var callbackId: Int?
     func build() -> UIButton {
         let button = UIButton.init(frame: frame!)
@@ -377,12 +409,15 @@ struct RNUIButton: Record {
       button.contentMode = .scaleToFill
       button.contentHorizontalAlignment = .fill
       button.contentVerticalAlignment = .fill
-        button.setImage(uiImage?.build(), for: UIControl.State.normal)
-        button.adjustsImageWhenHighlighted = false
-        if (callbackId != nil) {
-            button.tag = callbackId!
-        }
-        return button
+      button.setImage(uiImage?.build(), for: UIControl.State.normal)
+      button.adjustsImageWhenHighlighted = false
+      if let padding {
+          button.setPadding(top: padding.top, left: padding.left, bottom: padding.bottom, right: padding.right)
+      }
+      if (callbackId != nil) {
+          button.tag = callbackId!
+      }
+      return button
     }
 }
 struct RNOLPrivacyTermItem: Record {

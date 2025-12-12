@@ -112,6 +112,14 @@ export type CustomView = {
         bottom: number;
       }
     | undefined;
+  padding?:
+    | {
+        left: number;
+        top: number;
+        right: number;
+        bottom: number;
+      }
+    | undefined;
 };
 
 export type AndroidOneLoginUIConfig = {
