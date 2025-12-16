@@ -3,27 +3,30 @@
 
 name: Node.js Package
 
-on: 
-  workflow_dispatch
+on: workflow_dispatch
 
 jobs:
   publish-npm:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # For git operations
+      id-token: write # < REQUIRED FOR OIDC
+
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: git config
         run: |
           git config user.name "${GITHUB_ACTOR}"
           git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v6
         with:
-          node-version: 16
+          node-version: 24
           registry-url: https://registry.npmjs.org/
       - run: npm ci
       - run: npm run prepare
       - run: npm run release
         env:
-          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
           GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
+          NPM_CONFIG_PROVENANCE: true
