@@ -123,6 +123,15 @@ export type CustomView = {
 };
 
 export type AndroidOneLoginUIConfig = {
+  /**
+   * 屏蔽返回键与返回按钮返回事件，屏蔽后仍然会发生对应的错误码回调，只是 SDK 默认不关闭授权页
+   * blockReturnKey: 是否屏蔽物理返回键
+   * blockReturnBtn: 是否屏蔽返回按钮
+   */
+  blockReturnEvent?: {
+    blockReturnKey: boolean;
+    blockReturnBtn: boolean;
+  };
   statusBar?: {
     statusBarColor: ColorValue;
     statusBarStyle:

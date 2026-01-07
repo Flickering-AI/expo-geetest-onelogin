@@ -97,6 +97,10 @@ class ExpoGeetestOneloginModule : Module() {
 
     AsyncFunction("requestToken") { oneLoginThemeConfig: RNOneLoginThemeConfig?, callbackId: Int? ->
       val themeBuilder = OneLoginThemeConfig.Builder()
+      if (oneLoginThemeConfig?.blockReturnEvent != null) {
+        val map = oneLoginThemeConfig.blockReturnEvent
+        themeBuilder.setBlockReturnEvent(map.blockReturnKey, map.blockReturnBtn)
+      }
       if (oneLoginThemeConfig?.statusBar != null) {
         themeBuilder.setStatusBar(oneLoginThemeConfig.statusBar.statusBarColor, when (oneLoginThemeConfig.statusBar.statusBarStyle) {
           "UserInterfaceStyle.LIGHT" -> UserInterfaceStyle.LIGHT

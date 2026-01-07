@@ -370,7 +370,16 @@ class RNCustomView: Record {
   }
 }
 
+class RNOneLoginThemeConfigBlockReturnEvent : Record {
+  @Field
+  val blockReturnKey: Boolean = false
+  @Field
+  val blockReturnBtn: Boolean = false
+}
+
 class RNOneLoginThemeConfig : Record {
+  @Field
+  val blockReturnEvent: RNOneLoginThemeConfigBlockReturnEvent? = null
   @Field
   val statusBar: RNOneLoginThemeConfigStatusBar? = null
   @Field
